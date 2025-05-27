@@ -97,8 +97,5 @@ Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de
 ## Remerciements
 
 * Merci à [RAWG API](https://rawg.io/apidocs) pour la fourniture des données de jeux vidéo.
-* Remerciements à [OpenAI](https://openai.com/) pour l'assistance en développement.
 
 ---
-
-Tu peux adapter ce modèle selon les besoins spécifiques de ton projet.
