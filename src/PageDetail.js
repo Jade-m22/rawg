@@ -8,11 +8,6 @@ const PageDetail = async (slug) => {
     const game = await fetchGameDetails(slug);
 
     pageContent.innerHTML = `
-      <header class="header-bar">
-        <div class="logo">
-          <h1>The Hyper Program</h1>
-        </div>
-      </header>
       <main>
         <section class="game-detail">
           <div class="game-image-container">

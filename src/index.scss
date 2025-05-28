@@ -270,10 +270,26 @@ h2 {
 .external-link {
   color: #bbb;
   text-decoration: none;
+  position: relative;
+}
+
+.external-link::after {
+  content: '';
+  height: 1px;
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  background: rgb(210, 9, 51);
+  transition: width 0.3s ease;
 }
 
 .external-link:hover {
   color: rgb(210, 9, 51);
+}
+
+.external-link:hover::after {
+  width: 100%;
 }
 
 .buy-links h1 {
