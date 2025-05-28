@@ -357,3 +357,14 @@ h2 {
 .static-card:hover .card-back {
   transform: none !important;
 }
+
+.page-transition {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.page-visible {
+  opacity: 1;
+  transform: translateY(0);
+}

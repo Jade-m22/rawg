@@ -1,5 +1,3 @@
-console.log("Hello!")
-
 import './index.scss';
 import routes from './routes.js';
 
@@ -34,6 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// Transition liens internes
+window.addEventListener('hashchange', () => {
+  const wrapper = document.getElementById('pageTransitionWrapper');
+  if (wrapper) {
+    wrapper.classList.remove('page-visible');
+    void wrapper.offsetWidth;
+    wrapper.classList.add('page-transition');
+  }
+});
 
 window.addEventListener('hashchange', () => callRoute());
 window.addEventListener('DOMContentLoaded', () => callRoute());

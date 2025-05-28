@@ -2,12 +2,19 @@ import { fetchGameDetails, fetchGames } from './api.js';
 
 const PageDetail = async (slug) => {
   const pageContent = document.getElementById('pageContent');
-  pageContent.innerHTML = '<h2>Chargement des détails...</h2>';
+
+  pageContent.innerHTML = `
+    <div id="pageTransitionWrapper" class="page-transition">
+      <h2>Chargement des détails...</h2>
+    </div>
+  `;
+
+  const wrapper = document.getElementById('pageTransitionWrapper');
 
   try {
     const game = await fetchGameDetails(slug);
 
-    pageContent.innerHTML = `
+    wrapper.innerHTML = `
       <main>
         <section class="game-detail">
           <div class="game-image-container">
@@ -46,12 +53,18 @@ const PageDetail = async (slug) => {
       </main>
     `;
 
+    // Pour lancer l'animation
+    requestAnimationFrame(() => {
+      wrapper.classList.add('page-visible');
+    });
+
+    // Screenshots
     const screenshotsRes = await fetch(`https://api.rawg.io/api/games/${slug}/screenshots?key=${process.env.RAWG_API_KEY}`);
     const screenshotsData = await screenshotsRes.json();
     const screenshots = screenshotsData.results.slice(0, 4);
 
     if (screenshots.length) {
-      const screenshotsSection = document.querySelector('.screenshots');
+      const screenshotsSection = wrapper.querySelector('.screenshots');
       screenshots.forEach(ss => {
         const img = document.createElement('img');
         img.src = ss.image;
@@ -62,6 +75,7 @@ const PageDetail = async (slug) => {
       });
     }
 
+    // Jeux similaires
     try {
       const genres = game.genres.map(g => g.id).join(',');
       const publishers = game.publishers.map(p => p.id).join(',');
@@ -70,7 +84,7 @@ const PageDetail = async (slug) => {
       const filtered = similar.results.filter(g => g.id !== game.id);
 
       if (filtered.length) {
-        const similarSection = document.querySelector('.similar-games');
+        const similarSection = wrapper.querySelector('.similar-games');
         filtered.slice(0, 4).forEach(simGame => {
           const card = document.createElement('div');
           card.classList.add('game-card', 'static-card');
@@ -91,7 +105,8 @@ const PageDetail = async (slug) => {
     }
 
   } catch (error) {
-    pageContent.innerHTML = `<p>Erreur lors du chargement : ${error.message}</p>`;
+    wrapper.innerHTML = `<p>Erreur lors du chargement : ${error.message}</p>`;
+    wrapper.classList.add('page-visible');
   }
 };
 

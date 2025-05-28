@@ -31,7 +31,6 @@ const PageList = async (argument = '') => {
   totalShown = 0;
   currentFilter = '';
   currentSearch = '';
-
   let ordering = '-added';
 
   if (argument.startsWith('search=')) {
@@ -53,55 +52,49 @@ const PageList = async (argument = '') => {
     .toISOString()
     .split('T')[0];
 
-  // Vérifie ou crée dynamiquement le conteneur
-  let filtersWrapper = document.getElementById('filtersWrapper');
-  if (!filtersWrapper) {
-    const pageContent = document.getElementById('pageContent');
-    if (pageContent) {
-      pageContent.innerHTML = '<div id="filtersWrapper"></div>';
-      filtersWrapper = document.getElementById('filtersWrapper');
-    } else {
-      console.warn('Erreur : #pageContent introuvable.');
-      return;
-    }
-  }
+  const pageContent = document.getElementById('pageContent');
 
-  filtersWrapper.innerHTML = '';
+  pageContent.innerHTML = `<div id="pageTransitionWrapper" class="page-transition"></div>`;
+  const wrapper = document.getElementById('pageTransitionWrapper');
 
-  const filtersContainer = document.createElement('div');
-  filtersContainer.innerHTML = `
-    <div class="platform-select-wrapper">
-      <select id="platformSelect">
-        <option value="">Platform : Any</option>
-        <option value="4">PC</option>
-        <option value="187">PlayStation 5</option>
-        <option value="18">PlayStation 4</option>
-        <option value="16">PlayStation 3</option>
-        <option value="15">PlayStation 2</option>
-        <option value="27">PlayStation</option>
-        <option value="19">PS Vita</option>
-        <option value="17">PSP</option>
-        <option value="1">Xbox One</option>
-        <option value="186">Xbox Series S/X</option>
-        <option value="14">Xbox 360</option>
-        <option value="80">Xbox</option>
-        <option value="7">Nintendo Switch</option>
-        <option value="8">Nintendo 3DS</option>
-        <option value="9">Nintendo DS</option>
-        <option value="13">Nintendo DSi</option>
-        <option value="11">Wii</option>
-        <option value="10">Wii U</option>
-        <option value="3">iOS</option>
-        <option value="21">Android</option>
-        <option value="5">macOS</option>
-        <option value="6">Linux</option>
-        <option value="171">Web</option>
-      </select>
+  wrapper.innerHTML = `
+    <div id="filtersWrapper">
+      <div class="platform-select-wrapper">
+        <select id="platformSelect">
+          <option value="">Platform : Any</option>
+          <option value="4">PC</option>
+          <option value="187">PlayStation 5</option>
+          <option value="18">PlayStation 4</option>
+          <option value="16">PlayStation 3</option>
+          <option value="15">PlayStation 2</option>
+          <option value="27">PlayStation</option>
+          <option value="19">PS Vita</option>
+          <option value="17">PSP</option>
+          <option value="1">Xbox One</option>
+          <option value="186">Xbox Series S/X</option>
+          <option value="14">Xbox 360</option>
+          <option value="80">Xbox</option>
+          <option value="7">Nintendo Switch</option>
+          <option value="8">Nintendo 3DS</option>
+          <option value="9">Nintendo DS</option>
+          <option value="13">Nintendo DSi</option>
+          <option value="11">Wii</option>
+          <option value="10">Wii U</option>
+          <option value="3">iOS</option>
+          <option value="21">Android</option>
+          <option value="5">macOS</option>
+          <option value="6">Linux</option>
+          <option value="171">Web</option>
+        </select>
+      </div>
+      <div id="gamesContainer" class="games-grid"></div>
+      <button id="showMoreBtn">Show more</button>
     </div>
-    <div id="gamesContainer" class="games-grid"></div>
-    <button id="showMoreBtn">Show more</button>
   `;
-  filtersWrapper.appendChild(filtersContainer);
+
+  requestAnimationFrame(() => {
+    wrapper.classList.add('page-visible');
+  });
 
   const gamesContainer = document.getElementById('gamesContainer');
   const showMoreBtn = document.getElementById('showMoreBtn');
@@ -171,11 +164,7 @@ const PageList = async (argument = '') => {
       gamesContainer.appendChild(card);
     });
 
-    if (totalShown >= 27 || data.results.length < 9) {
-      showMoreBtn.style.display = 'none';
-    } else {
-      showMoreBtn.style.display = 'block';
-    }
+    showMoreBtn.style.display = totalShown >= 27 || data.results.length < 9 ? 'none' : 'block';
   };
 
   showMoreBtn.addEventListener('click', () => {
