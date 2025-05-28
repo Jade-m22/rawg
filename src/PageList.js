@@ -19,11 +19,9 @@ function renderPlatformIcons(platforms) {
     }
   });
 
-  const iconsHtml = Array.from(uniqueIcons)
+  return `<div class="platform-icons">${[...uniqueIcons]
     .map(icon => `<img src="${icon}" alt="Platform" class="platform-icon" />`)
-    .join('');
-
-  return `<div class="platform-icons">${iconsHtml}</div>`;
+    .join('')}</div>`;
 }
 
 const PageList = async (argument = '') => {
@@ -55,7 +53,19 @@ const PageList = async (argument = '') => {
     .toISOString()
     .split('T')[0];
 
-  const filtersWrapper = document.getElementById('filtersWrapper');
+  // Vérifie ou crée dynamiquement le conteneur
+  let filtersWrapper = document.getElementById('filtersWrapper');
+  if (!filtersWrapper) {
+    const pageContent = document.getElementById('pageContent');
+    if (pageContent) {
+      pageContent.innerHTML = '<div id="filtersWrapper"></div>';
+      filtersWrapper = document.getElementById('filtersWrapper');
+    } else {
+      console.warn('Erreur : #pageContent introuvable.');
+      return;
+    }
+  }
+
   filtersWrapper.innerHTML = '';
 
   const filtersContainer = document.createElement('div');
@@ -98,7 +108,6 @@ const PageList = async (argument = '') => {
   const platformSelect = document.getElementById('platformSelect');
   const searchInput = document.getElementById('searchInput');
 
-  // Si un filtre de plateforme est appliqué
   if (currentFilter.startsWith('platform-')) {
     const platformId = currentFilter.split('-')[1];
     platformSelect.value = platformId;
@@ -107,7 +116,6 @@ const PageList = async (argument = '') => {
   const loadGames = async () => {
     let query = `page_size=9&page=${currentPage}&ordering=${ordering}`;
 
-    // Ajoute les dates seulement si ce n'est pas une recherche ou un filtre de plateforme
     if (!currentSearch && !currentFilter.startsWith('platform-')) {
       query += `&dates=${startDate},${endDate}`;
     }
@@ -130,7 +138,6 @@ const PageList = async (argument = '') => {
       query += `&search=${encodeURIComponent(currentSearch)}`;
     }
 
-    // Log de la requête pour déboguer
     console.log('Query:', query);
 
     const data = await fetchGames(query);
@@ -151,7 +158,7 @@ const PageList = async (argument = '') => {
           <p><strong>Éditeur :</strong> ${game.publishers?.map(p => p.name).join(', ') || 'N/A'}</p>
           <p><strong>Note :</strong> ${game.rating || 'N/A'} (${game.ratings_count || 0} votes)</p>
           <p><strong>Genres :</strong> ${game.genres?.map(g => g.name).join(', ') || 'N/A'}</p>
-          <div class="platform-icons">${renderPlatformIcons(game.platforms)}</div>
+          ${renderPlatformIcons(game.platforms)}
           <p class="game-description">${game.short_description || 'Description non disponible'}</p>
           <h3 class="game-title">${game.name}</h3>
         </div>
@@ -163,7 +170,6 @@ const PageList = async (argument = '') => {
 
       gamesContainer.appendChild(card);
     });
-
 
     if (totalShown >= 27 || data.results.length < 9) {
       showMoreBtn.style.display = 'none';

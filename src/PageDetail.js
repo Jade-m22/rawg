@@ -12,9 +12,6 @@ const PageDetail = async (slug) => {
         <div class="logo">
           <h1>The Hyper Program</h1>
         </div>
-        <form>
-          <input type="text" placeholder="Recherche..." />
-        </form>
       </header>
       <main>
         <section class="game-detail">
@@ -81,7 +78,7 @@ const PageDetail = async (slug) => {
         const similarSection = document.querySelector('.similar-games');
         filtered.slice(0, 4).forEach(simGame => {
           const card = document.createElement('div');
-          card.classList.add('game-card');
+          card.classList.add('game-card', 'static-card');
           card.innerHTML = `
             <div class="card-front">
               <img src="${simGame.background_image}" alt="${simGame.name}" class="game-image"/>

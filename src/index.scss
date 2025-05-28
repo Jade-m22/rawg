@@ -9,16 +9,26 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 20px;
+  top: 0;
+  background-color: #000;
+  z-index: 1000;
+  padding: 10px 20px;
 }
 
-.header-bar form input {
-  padding: 10px;
+#searchForm {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+
+#searchInput {
+  padding: 8px;
   font-size: 16px;
   background-color: #222;
   color: #fff;
   border: 1px solid #444;
   border-radius: 5px;
+  width: 200px;
 }
 
 #pageContent {
@@ -113,7 +123,6 @@ h1, h2 {
 
 /* Card back styles */
 .game-card .card-back {
-  background: #111;
   transform: rotateY(180deg);
   text-align: left;
 }
@@ -219,7 +228,8 @@ h1, h2 {
   height: auto;
   object-fit: cover;
   border-radius: 10px;
-  align-items: center;
+  display: block;
+  margin: 0 auto;
 }
 
 .game-info {
@@ -321,7 +331,13 @@ h2 {
   margin: 10px 0;
 }
 
-.similar-games .game-card:hover {
-  transform: scale(1.05);
-  transition: transform 0.3s ease;
+.static-card .card-front,
+.static-card .card-back {
+  transform: none !important;
+  transition: none !important;
+}
+
+.static-card:hover .card-front,
+.static-card:hover .card-back {
+  transform: none !important;
 }

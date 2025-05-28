@@ -18,6 +18,23 @@ const callRoute = () => {
   }
 };
 
+document.addEventListener('DOMContentLoaded', () => {
+  const searchForm = document.getElementById('searchForm');
+  const searchInput = document.getElementById('searchInput');
+
+  if (searchForm && searchInput) {
+    searchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const query = searchInput.value.trim();
+      if (query.length > 0) {
+        window.location.hash = `#pagelist/search=${encodeURIComponent(query)}`;
+        searchInput.value = '';
+      }
+    });
+  }
+});
+
+
 window.addEventListener('hashchange', () => callRoute());
 window.addEventListener('DOMContentLoaded', () => callRoute());
 
